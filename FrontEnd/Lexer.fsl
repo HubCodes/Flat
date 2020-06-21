@@ -1,0 +1,34 @@
+{
+module Lexer
+
+open System
+open Parser
+open FSharp.Text.Lexing
+
+exception SyntaxError of string
+
+let lexeme = LexBuffer.LexemeString
+
+let newline (lexbuf: LexBuffer<_>) =
+  lexbuf.StartPos <- lexbuf.StartPos.NextLine
+
+let ops =
+  [ "+", PLUS
+    "-", MINUS ]
+  |> Map.ofList
+}
+
+let whitespace = [' ' '\t']
+let digit = ['0' - '9']
+let int = digit+
+let newline = "\r\n" | '\r' | '\n'
+let op = '+' | '-'
+
+rule tokenize =
+    parse
+    | whitespace    { tokenize lexbuf }
+    | int           { INT (int (lexeme lexbuf)) }
+    | newline       { newline lexbuf; tokenize lexbuf }
+    | op            { ops.[lexeme lexbuf] }
+    | eof           { EOF }
+    | _             { raise <| SyntaxError "Unexpected character." }

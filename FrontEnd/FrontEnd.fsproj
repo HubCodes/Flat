@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <RootNamespace>Parser</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\Core\Core.fsproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="FsLexYacc" Version="10.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+        <FsYacc Include="Parser.fsy">
+            <OtherFlags>--module Parser</OtherFlags>
+        </FsYacc>
+        <FsLex Include="Lexer.fsl">
+            <OtherFlags>--unicode</OtherFlags>
+        </FsLex>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Include="Parser.fsi" />
+      <Compile Include="Parser.fs" />
+      <Compile Include="Lexer.fs" />
+      <Compile Include="Library.fs" />
+    </ItemGroup>
+
+</Project>
