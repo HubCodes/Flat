@@ -1,5 +1,4 @@
 %{
-open Flat.Core.AST
 %}
 
 %start program

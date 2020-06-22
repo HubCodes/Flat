@@ -8,13 +8,13 @@
     <ItemGroup>
         <ProjectReference Include="..\Core\Core.fsproj" />
     </ItemGroup>
-    
+
     <ItemGroup>
       <PackageReference Include="FsLexYacc" Version="10.0.0" />
     </ItemGroup>
     <ItemGroup>
         <FsYacc Include="Parser.fsy">
-            <OtherFlags>--module Parser</OtherFlags>
+            <OtherFlags>--module Parser --open "Flat.Core.AST"</OtherFlags>
         </FsYacc>
         <FsLex Include="Lexer.fsl">
             <OtherFlags>--unicode</OtherFlags>
