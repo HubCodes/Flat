@@ -14,21 +14,24 @@ let newline (lexbuf: LexBuffer<_>) =
 
 let ops =
   [ "+", PLUS
-    "-", MINUS ]
+    "-", MINUS
+    "=", ASSIGN ]
   |> Map.ofList
 }
 
 let whitespace = [' ' '\t']
-let digit = ['0' - '9']
+let digit = ['0'-'9']
+let id = ['a'-'z''A'-'Z''$''_'] ['a'-'z''A'-'Z''$''_''0'-'9']*
 let int = digit+
 let newline = "\r\n" | '\r' | '\n'
-let op = '+' | '-'
+let op = '+' | '-' | '='
 
 rule tokenize =
     parse
     | whitespace    { tokenize lexbuf }
+    | id            { ID (lexeme lexbuf) }
     | int           { INT (int (lexeme lexbuf)) }
     | newline       { newline lexbuf; tokenize lexbuf }
     | op            { ops.[lexeme lexbuf] }
     | eof           { EOF }
-    | _             { raise <| SyntaxError "Unexpected character." }
+    | _             { raise <| SyntaxError (sprintf "Unexpected character %s" (lexeme lexbuf)) }

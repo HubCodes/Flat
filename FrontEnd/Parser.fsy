@@ -4,9 +4,12 @@
 %start program
 
 %token <int> INT
+%token <string> ID
 %token EOF
 %token PLUS MINUS
+%token ASSIGN
 
+%right ASSIGN
 %left PLUS MINUS
 
 %type <Expr option> program
@@ -20,4 +23,12 @@ program:
 expr:
     | expr PLUS expr      { Add ($1, $3) }
     | expr MINUS expr     { Sub ($1, $3 ) }
+    | expr ASSIGN expr    { Assign ($1, $3) }
     | INT                 { Literal (Int $1) }
+    | lhsExpr             { Lhs $1 }
+
+lhsExpr:
+    | var                 { $1 }
+
+var:
+    | ID                  { Var { Id = $1 } }
