@@ -17,21 +17,39 @@ let ops =
     "-", MINUS
     "=", ASSIGN ]
   |> Map.ofList
+
+let keywords =
+  [ "fn", FN ]
+  |> Map.ofList
+
+let puncts =
+  [ "(", OPEN_PAREN
+    ")", CLOSE_PAREN
+    "{", OPEN_BLOCK
+    "}", CLOSE_BLOCK
+    ":", COLON
+    ",", COMMA
+    ";", SEMICOLON ]
+  |> Map.ofList
 }
 
 let whitespace = [' ' '\t']
 let digit = ['0'-'9']
+let keyword = "fn"
 let id = ['a'-'z''A'-'Z''$''_'] ['a'-'z''A'-'Z''$''_''0'-'9']*
 let int = digit+
 let newline = "\r\n" | '\r' | '\n'
 let op = '+' | '-' | '='
+let punct = '(' | ')' | '{' | '}' | ':' | ',' | ';'
 
 rule tokenize =
     parse
     | whitespace    { tokenize lexbuf }
+    | keyword       { keywords.[lexeme lexbuf] }
     | id            { ID (lexeme lexbuf) }
     | int           { INT (int (lexeme lexbuf)) }
     | newline       { newline lexbuf; tokenize lexbuf }
     | op            { ops.[lexeme lexbuf] }
+    | punct         { puncts.[lexeme lexbuf] }
     | eof           { EOF }
     | _             { raise <| SyntaxError (sprintf "Unexpected character %s" (lexeme lexbuf)) }

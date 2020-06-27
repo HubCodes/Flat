@@ -5,11 +5,14 @@ open Lexer
 [<EntryPoint>]
 let main _ =
   let code =
-      """
-a = 1 + 1
+    """
+    fn a(i, j){
+      i + j;  
+    }
 """
   try
     printf "%A" <| parse code
   with
   | SyntaxError e -> printf "%A" e
+  | e -> printf "%A" e
   0

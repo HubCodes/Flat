@@ -5,6 +5,9 @@
 
 %token <int> INT
 %token <string> ID
+%token FN
+%token OPEN_PAREN CLOSE_PAREN OPEN_BLOCK CLOSE_BLOCK
+%token COLON COMMA SEMICOLON
 %token EOF
 %token PLUS MINUS
 %token ASSIGN
@@ -12,13 +15,17 @@
 %right ASSIGN
 %left PLUS MINUS
 
-%type <Expr option> program
+%type <Stmt option> program
 
 %%
 
 program:
-    | expr      { Some $1 }
+    | stmt      { Some $1 }
     | EOF       { None }
+
+stmt:
+    | expr SEMICOLON      { Expr $1 }
+    | funcExpr            { Expr (Func $1) }
 
 expr:
     | expr PLUS expr      { Add ($1, $3) }
@@ -26,9 +33,30 @@ expr:
     | expr ASSIGN expr    { Assign ($1, $3) }
     | INT                 { Literal (Int $1) }
     | lhsExpr             { Lhs $1 }
+    | funcExpr            { Func $1 }
 
 lhsExpr:
+    | var                 { Var $1 }
+
+funcExpr:
+    | FN ID OPEN_PAREN args CLOSE_PAREN block
+        { { Id = $2; Args = $4; Body = $6 } }
+
+args:
+    |                     { [] }
+    | arg                 { [ $1 ] }
+    | arg COMMA args      { $1 :: $3 }
+
+arg:
     | var                 { $1 }
 
+block:
+    | OPEN_BLOCK stmts CLOSE_BLOCK
+        { $2 }
+
+stmts:
+    |                     { [] }
+    | stmt stmts          { $1 :: $2 }
+
 var:
-    | ID                  { Var { Id = $1 } }
+    | ID                  { { Id = $1 } }
