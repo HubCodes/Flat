@@ -4,6 +4,7 @@ type Id = string
 
 type Stmt =
   | Expr of Expr
+  | Return of Expr
 
 type Expr =
   | Add of lhs: Expr * rhs: Expr

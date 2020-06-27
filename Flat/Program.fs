@@ -7,7 +7,8 @@ let main _ =
   let code =
     """
     fn a(i, j){
-      i + j;  
+      i + j;
+      return i + 1;
     }
 """
   try

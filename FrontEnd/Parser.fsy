@@ -5,7 +5,7 @@
 
 %token <int> INT
 %token <string> ID
-%token FN
+%token FN RETURN
 %token OPEN_PAREN CLOSE_PAREN OPEN_BLOCK CLOSE_BLOCK
 %token COLON COMMA SEMICOLON
 %token EOF
@@ -24,8 +24,9 @@ program:
     | EOF       { None }
 
 stmt:
-    | expr SEMICOLON      { Expr $1 }
-    | funcExpr            { Expr (Func $1) }
+    | expr SEMICOLON            { Expr $1 }
+    | RETURN expr SEMICOLON     { Return $2 }
+    | funcExpr                  { Expr (Func $1) }
 
 expr:
     | expr PLUS expr      { Add ($1, $3) }
