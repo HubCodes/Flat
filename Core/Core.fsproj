@@ -5,7 +5,10 @@
   </PropertyGroup>
   
   <ItemGroup>
+    <Compile Include="Symbol.fs" />
     <Compile Include="AST.fs" />
+    <Compile Include="Type.fs" />
+    <Compile Include="Env.fs" />
   </ItemGroup>
 
 </Project>

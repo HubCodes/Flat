@@ -1,6 +1,6 @@
 module rec Flat.Core.AST
 
-type Id = string
+open Flat.Core.Symbol
 
 type Stmt =
   | Expr of Expr
@@ -22,11 +22,11 @@ type Literal =
   | Int of int
   
 type FuncExpr =
-  { Id: Id
+  { Sym: Symbol
     Args: List<Var>
     Body: Block }
 
 type Block = List<Stmt>
 
 type Var =
-  { Id: Id }
+  { Sym: Symbol }

@@ -1,6 +1,6 @@
 module Flat.Core.Symbol
 
-open Flat.Core.AST
+type Id = string
 
 module SymbolId =
   let private symbolId = ref 0
@@ -14,4 +14,4 @@ type Symbol =
   { Name: Id
     Id: int }
 with
-  static member ofId id = { Name = id; Id = SymbolId.next () }
+  static member OfId id = { Name = id; Id = SymbolId.next () }

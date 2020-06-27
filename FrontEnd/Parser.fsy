@@ -1,4 +1,5 @@
 %{
+open ASTUtil
 %}
 
 %start program
@@ -41,7 +42,7 @@ lhsExpr:
 
 funcExpr:
     | FN ID OPEN_PAREN args CLOSE_PAREN block
-        { { Id = $2; Args = $4; Body = $6 } }
+        { fnOf $2 $4 $6 }
 
 args:
     |                     { [] }
@@ -60,4 +61,4 @@ stmts:
     | stmt stmts          { $1 :: $2 }
 
 var:
-    | ID                  { { Id = $1 } }
+    | ID                  { varOf $1 }
